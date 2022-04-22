@@ -114,6 +114,7 @@ public:
         aig = mockturtle::cleanup_dangling(aig);
         mockturtle::functional_reduction(aig);
         mockturtle::depth_view b_depth4{aig};
+        aig = mockturtle::cleanup_dangling(aig);
 
         return aig;
     }
