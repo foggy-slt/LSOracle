@@ -467,27 +467,21 @@ aig_ntk mig_to_aig(mig_names mig)
         if (mig._storage->nodes[n].children[0].data != 0) {
             mockturtle::mig_network::signal child1 = mig._storage->nodes[n].children[1];
             mockturtle::mig_network::signal child2 = mig._storage->nodes[n].children[2];
-            children.push_back(mig.is_complemented(child1) ? node2new[child1] :
-                               aig.create_not(node2new[child1]));
-            children.push_back(mig.is_complemented(child2) ? node2new[child2] :
-                               aig.create_not(node2new[child2]));
+            children.push_back(mig.is_complemented(child1) ? aig.create_not(node2new[child1]) :
+                               node2new[child1]);
+            children.push_back(mig.is_complemented(child2) ? aig.create_not(node2new[child2]) :
+                               node2new[child2]);
             nodes_to_change.insert(n);
+	    node2new[n] = aig.create_or(children.at(0), children.at(1));
         } else {
             for (int i = 1; i < mig._storage->nodes[n].children.size(); i++) {
                 auto node = mig.get_node(mig._storage->nodes[n].children[i]);
                 mockturtle::mig_network::signal child = mig._storage->nodes[n].children[i];
-                if (nodes_to_change.find(node) != nodes_to_change.end()) {
-
-                    children.push_back(mig.is_complemented(child) ? node2new[child] :
-                                       aig.create_not(node2new[child]));
-                } else {
-
-                    children.push_back(mig.is_complemented(child) ? aig.create_not(
+                children.push_back(mig.is_complemented(child) ? aig.create_not(
                                            node2new[child]) : node2new[child]);
-                }
             }
+	    node2new[n] = aig.create_and(children.at(0), children.at(1));
         }
-        node2new[n] = aig.create_and(children.at(0), children.at(1));
 
         if constexpr(mockturtle::has_has_name_v<NtkSource>
                      &&mockturtle::has_get_name_v<NtkSource> &&mockturtle::has_set_name_v<NtkDest>) {
