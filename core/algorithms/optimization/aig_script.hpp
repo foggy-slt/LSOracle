@@ -90,6 +90,7 @@ public:
         aig = mockturtle::cleanup_dangling(aig);
 
         mockturtle::functional_reduction(aig);
+        aig = mockturtle::cleanup_dangling(aig);
 
         return aig;
     }
