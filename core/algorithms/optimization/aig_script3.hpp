@@ -105,6 +105,7 @@ public:
 
         //fraig
         mockturtle::functional_reduction(aig);
+        aig = mockturtle::cleanup_dangling(aig);
 
         return aig;
     }
