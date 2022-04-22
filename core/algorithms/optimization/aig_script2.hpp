@@ -101,6 +101,7 @@ public:
         aig = mockturtle::balancing(aig, {balfn}, bs);
         aig = mockturtle::cleanup_dangling(aig);
         mockturtle::functional_reduction(aig);
+        aig = mockturtle::cleanup_dangling(aig);
 
         return aig;
     }
